@@ -6,6 +6,7 @@
 <style>
 input { margin: 3px;}
 </style>
+<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
 <h2>Register</h2>

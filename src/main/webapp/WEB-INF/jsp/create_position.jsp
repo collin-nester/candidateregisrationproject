@@ -9,6 +9,7 @@
     textarea {margin: 5px; padding: 5px;}
     textarea {font-family: sans-serif; width: 25%; height: 75px;}
     </style>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
