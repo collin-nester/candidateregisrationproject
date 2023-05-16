@@ -1,8 +1,8 @@
-package wow.cool.candidateregisrationproject.security;
+package wow.cool.candidateregistrationproject.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import wow.cool.candidateregisrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.entity.Candidate;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,7 +22,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("BASIC_ROLE"));
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override

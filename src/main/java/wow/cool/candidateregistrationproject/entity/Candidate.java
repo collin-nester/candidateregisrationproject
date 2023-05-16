@@ -1,4 +1,8 @@
-package wow.cool.candidateregisrationproject.entity;
+package wow.cool.candidateregistrationproject.entity;
+
+import jdk.internal.dynalink.support.NameCodec;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,7 +28,6 @@ public class Candidate {
 
     @Column(name="name")
     private String name;
-
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -52,8 +55,8 @@ public class Candidate {
         return "Candidate{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

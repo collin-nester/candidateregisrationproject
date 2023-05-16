@@ -1,1 +1,7 @@
 button, input {margin: 3px;}
+.menubar td {border: 2px solid black; color: black; font-family: sans-serif;}
+@keyframes hover-change {
+to {background-color: lightgrey;}
+}
+.menubar td:hover{animation: hover-change 0.5s ease-out; animation-fill-mode: forwards;}
+.menubar td a{text-decoration: none;}

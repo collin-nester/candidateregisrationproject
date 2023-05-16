@@ -1,4 +1,4 @@
-package wow.cool.candidateregisrationproject.controller.Helpers;
+package wow.cool.candidateregistrationproject.controller.Helpers;
 
 public class RegistrationInfo {
 

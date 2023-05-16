@@ -1,14 +1,15 @@
-package wow.cool.candidateregisrationproject.controller;
+package wow.cool.candidateregistrationproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import wow.cool.candidateregisrationproject.controller.Helpers.RegistrationInfo;
-import wow.cool.candidateregisrationproject.entity.Candidate;
-import wow.cool.candidateregisrationproject.service.CandidateService;
+import wow.cool.candidateregistrationproject.controller.Helpers.RegistrationInfo;
+import wow.cool.candidateregistrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.service.CandidateService;
 
 
 @Controller
@@ -16,6 +17,9 @@ public class CandidateController {
 
     @Autowired
     private CandidateService service;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("register")
     public String register(Model model){
@@ -26,9 +30,10 @@ public class CandidateController {
     @PostMapping("register")
     public String registrationConfirmation(Model model, @ModelAttribute("candidate") Candidate newCandidate){
         try {
-        service.saveCandidate(newCandidate);
-        model.addAttribute("candidate", newCandidate.toString());
-        return "registration_confirmation";
+            newCandidate.setPassword(passwordEncoder.encode(newCandidate.getPassword()));
+            service.saveCandidate(newCandidate);
+            model.addAttribute("candidate", newCandidate);
+            return "registration_confirmation";
         }
         catch(Exception e){
             return "registration_error";
@@ -50,6 +55,7 @@ public class CandidateController {
         try {
             Candidate registree = service.getCandidateById(registrationInfo.applicantid);
 
+            model.addAttribute("registree", registree);
             model.addAttribute("registered_positions", registree.getPositionsAppliedFor());
             model.addAttribute("total_registered", registree.getPositionsAppliedFor().size());
 

@@ -12,7 +12,7 @@
 </head>
 <body>
 <h2>Registered Positions List</h2>
-
+<p>${registree.name}</p>
 <p>Total Registered: ${total_registered}</p>
 
 <table>

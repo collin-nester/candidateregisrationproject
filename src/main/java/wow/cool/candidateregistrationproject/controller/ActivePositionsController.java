@@ -1,4 +1,4 @@
-package wow.cool.candidateregisrationproject.controller;
+package wow.cool.candidateregistrationproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,11 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import wow.cool.candidateregisrationproject.controller.Helpers.RegistrationInfo;
-import wow.cool.candidateregisrationproject.entity.ActivePosition;
-import wow.cool.candidateregisrationproject.entity.Candidate;
-import wow.cool.candidateregisrationproject.service.ActivePositionService;
-import wow.cool.candidateregisrationproject.service.CandidateService;
+import wow.cool.candidateregistrationproject.controller.Helpers.RegistrationInfo;
+import wow.cool.candidateregistrationproject.entity.ActivePosition;
+import wow.cool.candidateregistrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.service.ActivePositionService;
+import wow.cool.candidateregistrationproject.service.CandidateService;
 
 import java.util.List;
 

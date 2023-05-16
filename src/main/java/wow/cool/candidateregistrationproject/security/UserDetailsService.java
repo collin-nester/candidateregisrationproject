@@ -1,10 +1,10 @@
-package wow.cool.candidateregisrationproject.security;
+package wow.cool.candidateregistrationproject.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import wow.cool.candidateregisrationproject.entity.Candidate;
-import wow.cool.candidateregisrationproject.repo.CandidateRepo;
+import wow.cool.candidateregistrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.repo.CandidateRepo;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package wow.cool.candidateregisrationproject.entity;
+package wow.cool.candidateregistrationproject.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

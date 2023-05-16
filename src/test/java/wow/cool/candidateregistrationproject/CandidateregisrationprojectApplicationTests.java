@@ -1,4 +1,4 @@
-package wow.cool.candidateregisrationproject;
+package wow.cool.candidateregistrationproject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

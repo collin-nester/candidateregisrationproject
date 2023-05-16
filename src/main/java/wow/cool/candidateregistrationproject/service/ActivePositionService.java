@@ -1,9 +1,9 @@
-package wow.cool.candidateregisrationproject.service;
+package wow.cool.candidateregistrationproject.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import wow.cool.candidateregisrationproject.entity.ActivePosition;
-import wow.cool.candidateregisrationproject.repo.ActivePositionRepo;
+import wow.cool.candidateregistrationproject.entity.ActivePosition;
+import wow.cool.candidateregistrationproject.repo.ActivePositionRepo;
 
 import java.util.List;
 
