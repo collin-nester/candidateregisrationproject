@@ -29,9 +29,11 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
   `position_id` INT(11) NOT NULL,
   `candidate_id` INT(11) NOT NULL,
+  `education` VARCHAR(500) NULL DEFAULT NULL,
+  `experience` VARCHAR(500) NULL DEFAULT NULL,
   PRIMARY KEY (`candidate_id`, `position_id`),
-  INDEX `position_id_idx` (`position_id` ASC),
-  INDEX `candidate_id_idx` (`candidate_id` ASC),
+  INDEX `position_id_idx` (`position_id` ASC) VISIBLE,
+  INDEX `candidate_id_idx` (`candidate_id` ASC) VISIBLE,
   CONSTRAINT `candidate_id`
     FOREIGN KEY (`candidate_id`)
     REFERENCES `candidate_registration`.`candidate` (`user_id`)
@@ -43,4 +45,4 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = latin1
