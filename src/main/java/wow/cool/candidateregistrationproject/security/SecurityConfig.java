@@ -32,7 +32,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/create_position/", "/list_applicants/", "/applied_positions_lookup/").hasRole("ADMIN")
-                            .antMatchers("/register/**", "/home", "/css/global_styles.css", "/", "/applied_positions_lookup").permitAll()
+                            .antMatchers("/register/**", "/home", "/css/global_styles.css", "/").permitAll()
                             .antMatchers("/**").authenticated()
                 )
 

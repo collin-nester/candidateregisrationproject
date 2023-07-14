@@ -19,6 +19,8 @@
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="create_position"> <li>Create Position</li> </a>
+    <a href="list_applicants"> <li>List Applicants</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
@@ -31,14 +33,16 @@
 <table>
     <tr>
         <th>Applicant Name</th>
-        <th>Applicant Username</th>
         <th>Applicant ID</th>
+        <th>Relevant Experience</th>
+        <th>Relevant Education</th>
     </tr>
-    <c:forEach items="${candidates}" var="candidate">
+    <c:forEach items="${applications}" var="application">
         <tr>
-                <td id="applicant_name">${candidate.name}</td>
-                <td id="applicant_username">${candidate.username}</td>
-                <td id="applicant_id">${candidate.id}</td>
+                <td>${application.candidate.name}</td>
+                <td>${application.candidate.id}</td>
+                <td>${application.education}</td>
+                <td>${application.experience}</td>
         </tr>
     </c:forEach>
 </table>

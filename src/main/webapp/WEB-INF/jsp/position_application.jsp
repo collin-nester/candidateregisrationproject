@@ -14,6 +14,7 @@
     #position_apply_button_data {width: 5%;}
     table#position_application_table {width: 45%;}
     input {margin: 5px;}
+    textarea {width: 300px; height: 150px;}
     </style>
 <link rel="stylesheet" href="../css/global_styles.css">
 </head>
@@ -24,6 +25,8 @@
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="create_position"> <li>Create Position</li> </a>
+    <a href="list_applicants"> <li>List Applicants</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
@@ -45,9 +48,9 @@
 
 <div class="pos_application">
     <form:form action="position_application" method="post" modelAttribute="application_info">
-        Position ID: <form:input type="number" min="1" id="posid" path="positionId"/> <br>
-        Education: <form:textarea id="education" path="education"/> <br>
-        Experience: <form:textarea id="experience" path="experience"/> <br>
+        Position ID: <br><form:input type="number" min="1" id="posid" path="positionId"/> <br>
+        Relevant Education: <br><form:textarea id="education" path="education"/> <br>
+        Relevant Experience: <br><form:textarea id="experience" path="experience"/> <br>
         <input type="submit" value="Submit" id="submit"/>
     </form:form>
 </div>

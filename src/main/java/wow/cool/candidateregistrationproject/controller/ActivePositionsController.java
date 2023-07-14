@@ -17,6 +17,7 @@ import wow.cool.candidateregistrationproject.service.CandidateService;
 import wow.cool.candidateregistrationproject.service.DubiousService;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -101,20 +102,28 @@ public class ActivePositionsController {
         List<ActivePosition> allActivePositions = service.getAllActivePositions();
 
         model.addAttribute("activePositions", allActivePositions);
-        model.addAttribute("posinfo", new Dubious());
+        model.addAttribute("posinfo", new FormInfoCarrier());
         model.addAttribute("max_pos_id", service.findHighestID());
 
        return "list_applicants";
     }
 
     @PostMapping("list_applicants")
-    public String applicantList(Model model, @ModelAttribute("posid") Integer position_id){
+    public String applicantList(Model model, @ModelAttribute("positionId") Integer position_id){
 
         try {
         List<Candidate> applicants = service.findActivePositionById(position_id).getCandidateList();
+        List<Dubious> applicationList = new ArrayList<>();
 
+        for (Candidate applicant:applicants) {
+
+            long candidateId = applicant.getId();
+            DubiousId id = new DubiousId(position_id, candidateId);
+            applicationList.add(dubiousService.findByDubiousId(id));
+        }
+
+        model.addAttribute("applications", applicationList);
         model.addAttribute("position", service.findActivePositionById(position_id));
-        model.addAttribute("candidates", applicants);
         model.addAttribute("total_applied", applicants.size());
 
         return "applicant_list";

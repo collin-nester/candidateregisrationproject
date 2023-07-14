@@ -23,6 +23,8 @@
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="create_position"> <li>Create Position</li> </a>
+    <a href="list_applicants"> <li>List Applicants</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
@@ -47,7 +49,7 @@
 
 <div class="pos_selection">
     <form:form action="list_applicants" method="post" modelAttribute="posinfo">
-        Position ID: <form:input type="number" min="1" max="${max_pos_id}" id="posid" path="posid"/> <br>
+        Position ID: <form:input type="number" min="1" max="${max_pos_id}" id="posid" path="positionId"/> <br>
         <input type="submit" id="submit" value="Submit"/>
     </form:form>
 </div>

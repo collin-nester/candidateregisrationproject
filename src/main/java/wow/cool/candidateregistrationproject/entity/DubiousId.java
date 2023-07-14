@@ -8,6 +8,11 @@ public class DubiousId implements Serializable {
 
     public DubiousId() { }
 
+    public DubiousId(long posId, long candidateId) {
+        this.posId = posId;
+        this.candidateId = candidateId;
+    }
+
     private long posId;
     private long candidateId;
 

@@ -14,6 +14,8 @@
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="create_position"> <li>Create Position</li> </a>
+    <a href="list_applicants"> <li>List Applicants</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>

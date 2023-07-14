@@ -13,14 +13,17 @@
 <body>
 <h2>Applied Positions</h2>
 <ul class="menubar">
-    <a href="#"> <li>Home</li> </a>
+    <a href="home"> <li>Home</li> </a>
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="create_position"> <li>Create Position</li> </a>
+    <a href="list_applicants"> <li>List Applicants</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
 <p>Name: ${applicant.name}</p>
+<a href="applied_positions_lookup">Applied Positions Lookup</a>
 <p>Total Positions Applied For: ${total_applied}</p>
 
 <table>
