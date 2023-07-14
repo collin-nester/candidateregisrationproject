@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" href="../css/global_styles.css">
+<title>Application Confirmation</title>
+<link rel="stylesheet" href="../css/global_styles.css">
 </head>
 <body>
 <ul class="menubar">
@@ -13,5 +13,9 @@
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
+${application_info.candidate.name} has applied for ${application_info.position.positionName}. <br>
+Education: ${application_info.education} <br>
+Experience: ${application_info.experience} <br>
+<button onclick="window.history.back()">Go Back</button>
 </body>
 </html>

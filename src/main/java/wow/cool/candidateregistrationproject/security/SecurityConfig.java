@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,19 +28,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
+        http
 
-                .authorizeHttpRequests(authorize ->
-                    authorize.antMatchers("/create_position/**", "/list_registrees/**").hasRole("ADMIN")
-                            .antMatchers("/**").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/create_position/", "/list_applicants/", "/applied_positions_lookup/").hasRole("ADMIN")
+                            .antMatchers("/register/**", "/home", "/css/global_styles.css", "/", "/applied_positions_lookup").permitAll()
+                            .antMatchers("/**").authenticated()
                 )
 
-                .formLogin(form ->
-                    form.defaultSuccessUrl("/home")
-                            .permitAll()
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                        .defaultSuccessUrl("/home")
                 )
 
-                .logout( logout -> logout.
+                .logout(logout -> logout.
                         logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .permitAll());
 

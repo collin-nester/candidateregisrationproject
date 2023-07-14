@@ -4,16 +4,12 @@
 <html>
 
 <head>
-    <title>Create Position</title>
-    <style>
-    textarea {margin: 5px; padding: 5px;}
-    textarea {font-family: sans-serif; width: 25%; height: 75px;}
-    </style>
+    <title>Login</title>
     <link rel="stylesheet" href="../css/global_styles.css">
 </head>
-
 <body>
-<h2>Create Position</h2>
+
+<h2>Login</h2>
 <ul class="menubar">
     <a href="home"> <li>Home</li> </a>
     <a href="register"> <li>Register</li> </a>
@@ -22,11 +18,17 @@
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
-    <form:form action="create_position" method="post" modelAttribute="new_position">
-        Position Name:<br> <form:input type="text" path="positionName"/> <br>
-        Position Description:<br> <form:textarea path="positionDescription"/> <br>
-        <input type="submit" value="Create"/>
-    </form:form>
-</body>
+<c:if test="${param.error != null}">
+    Invalid login.
+</c:if>
+<c:if test="${param.logout != null}">
+    Logout Successful
+</c:if>
+<form:form method="post" action="login">
+    <br>Username: <input type="text" name="username"/>
+    <br>Password: <input type="password" name="password"/>
+    <br><input type="submit" name="login" value="Login">
+</form:form>
 
+</body>
 </html>

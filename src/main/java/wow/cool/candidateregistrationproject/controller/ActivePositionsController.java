@@ -6,12 +6,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import wow.cool.candidateregistrationproject.controller.Helpers.RegistrationInfo;
+import wow.cool.candidateregistrationproject.controller.Helpers.FormInfoCarrier;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.entity.Dubious;
+import wow.cool.candidateregistrationproject.entity.DubiousId;
+import wow.cool.candidateregistrationproject.repo.CandidateRepo;
 import wow.cool.candidateregistrationproject.service.ActivePositionService;
 import wow.cool.candidateregistrationproject.service.CandidateService;
+import wow.cool.candidateregistrationproject.service.DubiousService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -22,6 +27,12 @@ public class ActivePositionsController {
 
     @Autowired
     private CandidateService candidateService;
+
+    @Autowired
+    private CandidateRepo candidateRepo;
+
+    @Autowired
+    private DubiousService dubiousService;
 
     @GetMapping("create_position")
     public String createPosition(Model model) {
@@ -42,60 +53,71 @@ public class ActivePositionsController {
     }
 
 
-    @GetMapping("position_registration")
-    public String positionRegistration(Model model){
+    @GetMapping("position_application")
+    public String positionApplication(Model model){
 
         List<ActivePosition> allActivePositions = service.getAllActivePositions();
         model.addAttribute("allActivePositions", allActivePositions);
-        model.addAttribute("registration_info", new RegistrationInfo());
+        model.addAttribute("application_info", new FormInfoCarrier());
 
-        return "position_registration";
+        return "position_application";
     }
 
-    @PostMapping("position_registration")
-    public String positionRegistrationConfirmation(Model model, @ModelAttribute("registration_info") RegistrationInfo registrationInfo) {
+    @PostMapping("position_application")
+    public String positionApplicationConfirmation(Model model, @ModelAttribute("application_info") FormInfoCarrier formInfoCarrier,
+                                                  Principal principal) {
         try {
 
-                    Candidate registeringCandidate = candidateService.getCandidateById(registrationInfo.applicantid);
-                    ActivePosition positionBeingRegistered = service.findActivePositionById(registrationInfo.posid);
+            Candidate applyingCandidate = candidateRepo.findByUsername(principal.getName()).get();
+            ActivePosition positionBeingAppliedFor = service.findActivePositionById(formInfoCarrier.getPositionId());
 
-                    positionBeingRegistered.addCandidateToList(registeringCandidate);
-                    service.saveActivePosition(positionBeingRegistered);
+//            positionBeingAppliedFor.addCandidateToList(applyingCandidate);
+//            service.saveActivePosition(positionBeingAppliedFor);
 
-                    model.addAttribute("candidate", registeringCandidate.getName());
-                    model.addAttribute("position", positionBeingRegistered.getPositionName());
+            DubiousId jointId = new DubiousId();
+            jointId.setCandidateId(applyingCandidate.getId());
+            jointId.setPosId(formInfoCarrier.getPositionId());
 
-                return "position_registration_confirmation";
+            Dubious joined = new Dubious();
+            joined.setId(jointId);
+            joined.setPosition(positionBeingAppliedFor);
+            joined.setCandidate(applyingCandidate);
+            joined.setEducation(formInfoCarrier.getEducation());
+            joined.setExperience(formInfoCarrier.getExperience());
+            dubiousService.saveDubious(joined);
+
+            model.addAttribute("application_info", joined);
+
+            return "position_application_confirmation";
         }
         catch (Exception e) {
-
             return "page_error";
         }
     }
 
-    @GetMapping("list_registrees")
-    public String listRegistrees(Model model) {
+    @GetMapping("list_applicants")
+    public String listApplicants(Model model) {
 
         List<ActivePosition> allActivePositions = service.getAllActivePositions();
 
         model.addAttribute("activePositions", allActivePositions);
-        model.addAttribute("posinfo", new RegistrationInfo());
+        model.addAttribute("posinfo", new Dubious());
         model.addAttribute("max_pos_id", service.findHighestID());
 
-       return "list_registrees";
+       return "list_applicants";
     }
 
-    @PostMapping("list_registrees")
-    public String registreeList(Model model, @ModelAttribute("posid") Integer position_id){
+    @PostMapping("list_applicants")
+    public String applicantList(Model model, @ModelAttribute("posid") Integer position_id){
 
         try {
-        List<Candidate> registrees = service.findActivePositionById(position_id).getCandidateList();
+        List<Candidate> applicants = service.findActivePositionById(position_id).getCandidateList();
 
-        List<Candidate> candidates = service.findActivePositionById(position_id).getCandidateList();
-        model.addAttribute("candidates", candidates);
-        model.addAttribute("total_registered", registrees.size());
+        model.addAttribute("position", service.findActivePositionById(position_id));
+        model.addAttribute("candidates", applicants);
+        model.addAttribute("total_applied", applicants.size());
 
-        return "registree_list";
+        return "applicant_list";
         }
         catch (Exception e) {
 

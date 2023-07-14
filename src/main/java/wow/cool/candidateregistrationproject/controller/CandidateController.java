@@ -7,9 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import wow.cool.candidateregistrationproject.controller.Helpers.RegistrationInfo;
 import wow.cool.candidateregistrationproject.entity.Candidate;
+import wow.cool.candidateregistrationproject.entity.Dubious;
+import wow.cool.candidateregistrationproject.entity.DubiousId;
+import wow.cool.candidateregistrationproject.repo.CandidateRepo;
 import wow.cool.candidateregistrationproject.service.CandidateService;
+
+import java.security.Principal;
 
 
 @Controller
@@ -17,6 +21,9 @@ public class CandidateController {
 
     @Autowired
     private CandidateService service;
+
+    @Autowired
+    private CandidateRepo repo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,26 +47,39 @@ public class CandidateController {
         }
     }
 
-    @GetMapping("list_registered_positions")
-    public String listRegisteredPositions(Model model) {
+    @GetMapping("applied_positions")
+    public String listAppliedPositions(Model model, Principal principal) {
 
-        RegistrationInfo registrationInfo = new RegistrationInfo();
-        model.addAttribute("registration_info", registrationInfo);
+        Candidate applicant = repo.findByUsername(principal.getName()).get();
 
-        return "list_registered_positions";
+        model.addAttribute("applicant", applicant);
+        model.addAttribute("applied_positions", applicant.getPositionsAppliedFor());
+        model.addAttribute("total_applied", applicant.getPositionsAppliedFor().size());
+
+        return "applied_positions";
     }
 
-    @PostMapping("list_registered_positions")
-    public String registeredPositionsList(Model model, @ModelAttribute("registration_info") RegistrationInfo registrationInfo) {
+    @GetMapping("applied_positions_lookup")
+    public String appliedPositionsLookup(Model model) {
+
+        model.addAttribute("application_info", new DubiousId());
+
+        return "applied_positions_lookup";
+    }
+
+    @PostMapping("applied_positions_lookup")
+    public String appliedPositions(Model model, @ModelAttribute("application_info") DubiousId applicationInfo) {
 
         try {
-            Candidate registree = service.getCandidateById(registrationInfo.applicantid);
+            Dubious applicantInfo = new Dubious();
+            applicantInfo.setId(applicationInfo);
+            Candidate applicant = applicantInfo.getCandidate();
 
-            model.addAttribute("registree", registree);
-            model.addAttribute("registered_positions", registree.getPositionsAppliedFor());
-            model.addAttribute("total_registered", registree.getPositionsAppliedFor().size());
+            model.addAttribute("applicant", applicant);
+            model.addAttribute("applied_positions", applicant.getPositionsAppliedFor());
+            model.addAttribute("total_applied", applicant.getPositionsAppliedFor().size());
 
-            return "registered_positions_list";
+            return "applied_positions_list";
         }
         catch (Exception e) {
 

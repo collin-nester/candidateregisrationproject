@@ -1,0 +1,8 @@
+button, input {margin: 3px;}
+ul.menubar {list-style-type: none;}
+.menubar li {border: 1px solid grey; font-family: sans-serif; padding: 7px; display: inline; margin: -2px;}
+@keyframes hover-change {
+to {background-color: lightgrey;}
+}
+.menubar li:hover{animation: hover-change 0.5s ease-out; animation-fill-mode: forwards;}
+.menubar a {text-decoration: none; color: black;}

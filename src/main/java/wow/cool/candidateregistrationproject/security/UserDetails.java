@@ -13,16 +13,23 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     private String password;
 
+    private long id;
+
     public UserDetails(Candidate user) {
 
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.id = user.getId();
 
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override

@@ -3,17 +3,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Registered Positions List</title>
+    <title>Applied Positions</title>
     <style>
     table, td, th {border: 1px solid black; border-collapse: collapse; padding: 5px;}
     td {width: 20%;}
     </style>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/global_styles.css">
 </head>
 <body>
-<h2>Registered Positions List</h2>
-<p>${registree.name}</p>
-<p>Total Registered: ${total_registered}</p>
+<h2>Applied Positions</h2>
+<ul class="menubar">
+    <a href="#"> <li>Home</li> </a>
+    <a href="register"> <li>Register</li> </a>
+    <a href="position_application"> <li>Position Application</li> </a>
+    <a href="applied_positions"> <li>Applied Positions</li> </a>
+    <a href="login"> <li>Login</li> </a>
+    <a href="logout"> <li>Logout</li> </a>
+</ul>
+<p>Name: ${applicant.name}</p>
+<p>Total Positions Applied For: ${total_applied}</p>
 
 <table>
     <tr>
@@ -21,14 +29,13 @@
         <th>Position Description</th>
         <th>Position ID</th>
     </tr>
-    <c:forEach items="${registered_positions}" var="position">
+    <c:forEach items="${applied_positions}" var="position">
         <tr>
                 <td>${position.positionName}</td>
                 <td>${position.positionDescription}</td>
                 <td>${position.id}</td>
         </tr>
     </c:forEach>
-    <button onclick="window.history.back()">Go Back</button>
 </table>
 </body>
 </html>
