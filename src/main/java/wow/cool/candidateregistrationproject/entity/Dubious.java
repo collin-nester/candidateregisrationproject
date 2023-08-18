@@ -1,6 +1,8 @@
 package wow.cool.candidateregistrationproject.entity;
 
 import javax.persistence.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Entity
 @Table(name="position_candidate_join")
@@ -24,6 +26,9 @@ public class Dubious {
 
     @Column(name="experience")
     private String experience;
+
+    @Column(name="resume")
+    private String resumeExtension;
 
     public Dubious() {}
 
@@ -66,6 +71,23 @@ public class Dubious {
     public void setExperience(String experience) {
         this.experience = experience;
     }
+    public Path getResume() {
+
+        if (resumeExtension != null && resumeExtension.trim() != "")
+            return Paths.get(System.getProperty("java.io.tmpdir") + "Resumes\\",
+                    candidate.getId() + "+" + position.getId() + resumeExtension);
+        else
+            return null;
+
+    }
+
+    public String getResumeExtension() {
+        return resumeExtension;
+    }
+
+    public void setResumeExtension(String resumeExtension) {
+        this.resumeExtension = resumeExtension;
+    }
 
     @Override
     public String toString() {
@@ -74,6 +96,7 @@ public class Dubious {
                 ", candidate=" + candidate +
                 ", education='" + education + '\'' +
                 ", experience='" + experience + '\'' +
+                ", resumeExtension='" + resumeExtension + '\'' +
                 '}';
     }
 

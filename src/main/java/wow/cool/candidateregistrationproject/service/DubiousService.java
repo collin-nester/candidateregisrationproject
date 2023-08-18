@@ -6,7 +6,8 @@ import wow.cool.candidateregistrationproject.entity.Dubious;
 import wow.cool.candidateregistrationproject.entity.DubiousId;
 import wow.cool.candidateregistrationproject.repo.DubiousRepo;
 
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 
 @Service
 public class DubiousService {
@@ -19,5 +20,12 @@ public class DubiousService {
     }
 
     public Dubious findByDubiousId(DubiousId dubiousId) {return repo.findById(dubiousId);}
+
+    @Transactional
+    public void deleteByDubiousId(DubiousId dubiousId) {
+        repo.deleteById(dubiousId);
+    }
+
+    public ArrayList<Dubious> findAllByPositionId(long id) { return repo.findAllByPositionId(id); }
 
 }

@@ -15,17 +15,20 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     private long id;
 
+    private String role;
+
     public UserDetails(Candidate user) {
 
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.id = user.getId();
+        this.role = user.getRole();
 
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return Arrays.asList(new SimpleGrantedAuthority(role));
     }
 
     public long getId() {

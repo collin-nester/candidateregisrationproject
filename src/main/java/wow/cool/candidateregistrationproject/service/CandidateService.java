@@ -50,4 +50,8 @@ public class CandidateService {
         repo.deleteById(id);
     }
 
+    public Candidate findByUsername(String username) {
+        return repo.findByUsername(username).get();
+    }
+
 }

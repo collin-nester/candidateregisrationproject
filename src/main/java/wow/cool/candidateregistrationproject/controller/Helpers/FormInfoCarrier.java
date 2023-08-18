@@ -1,5 +1,6 @@
 package wow.cool.candidateregistrationproject.controller.Helpers;
 
+import org.springframework.web.multipart.MultipartFile;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
 
@@ -11,6 +12,17 @@ public class FormInfoCarrier {
     private int candidateId;
     private String experience;
     private String education;
+
+    private boolean admin;
+    private MultipartFile file;
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public ActivePosition getPosition() {
         return position;
@@ -59,4 +71,13 @@ public class FormInfoCarrier {
     public void setEducation(String education) {
         this.education = education;
     }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
 }

@@ -25,8 +25,7 @@
     <a href="register"> <li>Register</li> </a>
     <a href="position_application"> <li>Position Application</li> </a>
     <a href="applied_positions"> <li>Applied Positions</li> </a>
-    <a href="create_position"> <li>Create Position</li> </a>
-    <a href="list_applicants"> <li>List Applicants</li> </a>
+    <a href="admin_tools"> <li>Admin Tools</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
@@ -47,10 +46,11 @@
 </table>
 
 <div class="pos_application">
-    <form:form action="position_application" method="post" modelAttribute="application_info">
-        Position ID: <br><form:input type="number" min="1" id="posid" path="positionId"/> <br>
-        Relevant Education: <br><form:textarea id="education" path="education"/> <br>
-        Relevant Experience: <br><form:textarea id="experience" path="experience"/> <br>
+    <form:form enctype='multipart/form-data' action="position_application" method="post" modelAttribute="application_info">
+        Position ID: <br><form:input type="number" min="1" id="posid" path="positionId" required="true"/> <br>
+        Relevant Education: <br><form:textarea id="education" path="education" required="true"/> <br>
+        Relevant Experience: <br><form:textarea id="experience" path="experience" required="true"/> <br>
+        Resume: <form:input type="file" name="file" path="file"/> <br>
         <input type="submit" value="Submit" id="submit"/>
     </form:form>
 </div>

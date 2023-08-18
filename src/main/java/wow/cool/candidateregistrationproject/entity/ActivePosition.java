@@ -30,6 +30,10 @@ public class ActivePosition {
     )
     private List<Candidate> candidateList;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "position_creator")
+    private Candidate positionCreator;
+
     public ActivePosition() {
     }
 
@@ -44,6 +48,7 @@ public class ActivePosition {
                 "id=" + id +
                 ", positionName='" + positionName + '\'' +
                 ", positionDescription='" + positionDescription + '\'' +
+                ", positionCreator='" + positionCreator + '\'' +
                 '}';
     }
 
@@ -75,10 +80,6 @@ public class ActivePosition {
         return candidateList;
     }
 
-    public void setCandidateList(List<Candidate> candidateList) {
-        this.candidateList = candidateList;
-    }
-
     public void addCandidateToList(Candidate candidate) {
 
         if (candidateList == null) {
@@ -88,4 +89,11 @@ public class ActivePosition {
         candidateList.add(candidate);
     }
 
+    public Candidate getPositionCreator() {
+        return positionCreator;
+    }
+
+    public void setPositionCreator(Candidate positionCreator) {
+        this.positionCreator = positionCreator;
+    }
 }

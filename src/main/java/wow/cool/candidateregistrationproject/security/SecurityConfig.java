@@ -29,10 +29,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/create_position/", "/list_applicants/", "/applied_positions_lookup/").hasRole("ADMIN")
-                            .antMatchers("/register/**", "/home", "/css/global_styles.css", "/").permitAll()
+                        .antMatchers("/create_position", "/list_applicants", "/applied_positions_lookup", "/my_postinsg").hasRole("ADMIN")
+                            .antMatchers("/register/**", "/home", "/css/**", "/").permitAll()
                             .antMatchers("/**").authenticated()
                 )
 

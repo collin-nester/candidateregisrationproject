@@ -1,9 +1,5 @@
 package wow.cool.candidateregistrationproject.entity;
 
-import jdk.internal.dynalink.support.NameCodec;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +25,9 @@ public class Candidate {
     @Column(name="name")
     private String name;
 
+    @Column(name="role")
+    private String role;
+
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
@@ -40,7 +39,13 @@ public class Candidate {
     )
     private List<ActivePosition> positionsAppliedFor;
 
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "position_creator")
+    private List<ActivePosition> positionsCreated;
+
     public Candidate() {
+        this.role = "ROLE_USER";
     }
 
     public Candidate(String name, String username, String password, String email) {
@@ -48,6 +53,7 @@ public class Candidate {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = "ROLE_USER";
     }
 
     @Override
@@ -55,9 +61,9 @@ public class Candidate {
         return "Candidate{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 
@@ -101,22 +107,19 @@ public class Candidate {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public List<ActivePosition> getPositionsAppliedFor() {
         return positionsAppliedFor;
     }
 
-    public void setPositionsAppliedFor(List<ActivePosition> positionsAppliedFor) {
-        this.positionsAppliedFor = positionsAppliedFor;
+    public List<ActivePosition> getPositionsCreated() {
+        return positionsCreated;
     }
-
-    public void addPositionAppliedFor(ActivePosition appliedPosition) {
-
-        if (positionsAppliedFor == null) {
-            positionsAppliedFor = new ArrayList<>();
-        }
-
-        positionsAppliedFor.add(appliedPosition);
-
-    }
-
 }

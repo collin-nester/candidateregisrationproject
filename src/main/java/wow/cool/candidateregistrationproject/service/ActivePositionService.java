@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.repo.ActivePositionRepo;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -47,6 +48,11 @@ public class ActivePositionService {
         }
 
         return temp_max;
+    }
+
+    @Transactional
+    public void deleteById(long id) {
+        repo.deleteById(id);
     }
 
 }
