@@ -5,6 +5,35 @@ DROP TABLE IF EXISTS `candidate_registration`.`candidate`;
 DROP TABLE IF EXISTS `candidate_registration`.`active_positions`;
 DROP TABLE IF EXISTS `candidate_registration`.`position_candidate_join`;
 
+CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate` (
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(63) NULL DEFAULT NULL,
+  `password` CHAR(60) NULL DEFAULT NULL,
+  `email` VARCHAR(255) NULL DEFAULT NULL,
+  `name` VARCHAR(63) NOT NULL,
+  `role` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+CREATE TABLE IF NOT EXISTS `candidate_registration`.`active_positions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `position_name` VARCHAR(63) NULL DEFAULT NULL,
+  `position_description` VARCHAR(255) NULL DEFAULT NULL,
+  `position_creator` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  INDEX `position_creator_idx` (`position_creator` ASC) VISIBLE,
+  CONSTRAINT `position_creator`
+    FOREIGN KEY (`position_creator`)
+    REFERENCES `candidate_registration`.`candidate` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
   `position_id` INT(11) NOT NULL,
   `candidate_id` INT(11) NOT NULL,
@@ -25,35 +54,4 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1
-
-CREATE TABLE IF NOT EXISTS `candidate_registration`.`active_positions` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `position_name` VARCHAR(63) NULL DEFAULT NULL,
-  `position_description` VARCHAR(255) NULL DEFAULT NULL,
-  `position_creator` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `position_creator_idx` (`position_creator` ASC) VISIBLE,
-  CONSTRAINT `position_creator`
-    FOREIGN KEY (`position_creator`)
-    REFERENCES `candidate_registration`.`candidate` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = latin1
-
-CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate` (
-  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(63) NULL DEFAULT NULL,
-  `password` CHAR(60) NULL DEFAULT NULL,
-  `email` VARCHAR(255) NULL DEFAULT NULL,
-  `name` VARCHAR(63) NOT NULL,
-  `role` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = latin1
+DEFAULT CHARACTER SET = latin1;
