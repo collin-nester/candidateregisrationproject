@@ -12,9 +12,9 @@ public class FormInfoCarrier {
     private int candidateId;
     private String experience;
     private String education;
-
     private boolean admin;
     private MultipartFile file;
+    private boolean emailable;
 
     public MultipartFile getFile() {
         return file;
@@ -80,4 +80,11 @@ public class FormInfoCarrier {
         this.admin = admin;
     }
 
+    public boolean isEmailable() {
+        return emailable;
+    }
+
+    public void setEmailable(boolean emailable) {
+        this.emailable = emailable;
+    }
 }

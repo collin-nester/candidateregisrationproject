@@ -44,6 +44,9 @@ public class Candidate {
     @JoinColumn(name = "position_creator")
     private List<ActivePosition> positionsCreated;
 
+    @Column(name = "emailable")
+    private Boolean emailable;
+
     public Candidate() {
         this.role = "ROLE_USER";
     }
@@ -121,5 +124,13 @@ public class Candidate {
 
     public List<ActivePosition> getPositionsCreated() {
         return positionsCreated;
+    }
+
+    public Boolean isEmailable() {
+        return emailable && email != null;
+    }
+
+    public void setEmailable(Boolean emailable) {
+        this.emailable = emailable;
     }
 }

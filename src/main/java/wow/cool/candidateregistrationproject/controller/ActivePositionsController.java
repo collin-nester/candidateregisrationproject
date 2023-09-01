@@ -7,11 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wow.cool.candidateregistrationproject.controller.Helpers.FormInfoCarrier;
+import wow.cool.candidateregistrationproject.controller.Helpers.SendEmail;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
 import wow.cool.candidateregistrationproject.entity.Dubious;
 import wow.cool.candidateregistrationproject.entity.DubiousId;
-import wow.cool.candidateregistrationproject.repo.CandidateRepo;
 import wow.cool.candidateregistrationproject.service.ActivePositionService;
 import wow.cool.candidateregistrationproject.service.CandidateService;
 import wow.cool.candidateregistrationproject.service.DubiousService;
@@ -49,8 +49,22 @@ public class ActivePositionsController {
     public String createPositionConfirmation(Model model, @ModelAttribute("new_position") ActivePosition newPosition, Principal principal){
 
         if (newPosition.getPositionName() != null & newPosition.getPositionDescription() != null){
-            newPosition.setPositionCreator(candidateService.findByUsername(principal.getName()));
+            Candidate creator = candidateService.findByUsername(principal.getName());
+            newPosition.setPositionCreator(creator);
             service.saveActivePosition(newPosition);
+
+            if (creator.isEmailable())
+                SendEmail.sendEmail("You've created a position",
+                        "You've successfully created the position " + newPosition.getPositionName() +
+                                ". You can find your applicants in the My Postings section of the Admin Tools page.",
+                        creator.getEmail());
+
+            for (Candidate candidate : candidateService.getAllCandidates())
+                if (candidate.isEmailable())
+                    SendEmail.sendEmail("New Posting",
+                            "An application for " + newPosition.getPositionName() + " has just opened up at GeekSI.",
+                            candidate.getEmail());
+
             return "create_position_confirmation";
         } else {
             return "page_error";
@@ -141,6 +155,11 @@ public class ActivePositionsController {
                 dubiousService.deleteByDubiousId(i.getId());
             }
             service.deleteById(positionToBeDeleted.getId());
+            for (Dubious application : deletedApplications)
+                if (application.getCandidate().isEmailable())
+                    SendEmail.sendEmail("Position Filled", application.getPosition().getPositionName()
+                            + " has been filled.",
+                            application.getCandidate().getEmail());
         }
         else
             return "page_error";

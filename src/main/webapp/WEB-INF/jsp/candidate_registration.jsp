@@ -19,15 +19,14 @@ input { margin: 3px;}
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
-<form:form action="register" method="post" modelAttribute="candidate">
-    Name: <form:input type="text" path="name" required="true"/><br>
-    Username: <form:input type="text" path="username" required="true"/><br>
-    Password: <form:input type="password" path="password" required="true"/><br>
-    Email: <form:input type="text" path="email" required="true"/><br>
-    <form:form modelAttribute="forminfocarrier">
-        Admin <form:checkbox path="admin"/><br>
+<form:form action="register" method="post" modelAttribute="forminfocarrier">
+    Name: <form:input type="text" path="candidate.name" required="true"/><br>
+    Username: <form:input type="text" path="candidate.username" required="true"/><br>
+    Password: <form:input type="password" path="candidate.password" required="true"/><br>
+    Email: <form:input type="text" path="candidate.email" required="true"/><br>
+    Admin <form:checkbox path="admin"/><br>
+    Recieve email updates? <form:checkbox path="emailable"/><br>
     <input type="submit" value="Register"/>
-        </form:form>
 </form:form>
 </body>
 </html>

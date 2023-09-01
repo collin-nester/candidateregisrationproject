@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wow.cool.candidateregistrationproject.controller.Helpers.FormInfoCarrier;
+import wow.cool.candidateregistrationproject.controller.Helpers.SendEmail;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
 import wow.cool.candidateregistrationproject.entity.Dubious;
@@ -48,14 +49,20 @@ public class CandidateController {
     }
 
     @PostMapping("register")
-    public String registrationConfirmation(Model model, @ModelAttribute("candidate") Candidate newCandidate,
-                                           @ModelAttribute("forminfocarrier") FormInfoCarrier formInfoCarrier){
+    public String registrationConfirmation(Model model, @ModelAttribute("forminfocarrier") FormInfoCarrier formInfoCarrier){
         try {
+            Candidate newCandidate = formInfoCarrier.getCandidate();
             newCandidate.setPassword(passwordEncoder.encode(newCandidate.getPassword()));
             if (formInfoCarrier.isAdmin()){
                 newCandidate.setRole("ROLE_ADMIN");
             }
+            newCandidate.setEmailable(formInfoCarrier.isEmailable());
             service.saveCandidate(newCandidate);
+            if (newCandidate.isEmailable()) {
+                String message = "Welcome to the GeekSI application platform, " + newCandidate.getName() +
+                        ". Feel free to submit your applications under the Position Application tab.";
+                SendEmail.sendEmail("Welcome to GeekSI", message, newCandidate.getEmail());
+            }
             model.addAttribute("candidate", newCandidate);
             return "registration_confirmation";
         }
@@ -136,8 +143,25 @@ public class CandidateController {
             dubiousService.saveDubious(joined);
 
             model.addAttribute("application_info", joined);
-            if (formInfoCarrier.getExperience() != null || formInfoCarrier.getEducation() != null)
+            if (formInfoCarrier.getExperience() != null || formInfoCarrier.getEducation() != null) {
+
+                String message = "Your application for "
+                        + positionBeingAppliedFor.getPositionName()
+                        + " has been recieved! We look forward to getting to know you " +
+                        "better through this application process.\n\n" +
+                        "Best Regards, GeekSI";
+                if (applyingCandidate.isEmailable())
+                    SendEmail.sendEmail("Thanks for applying!", message, applyingCandidate.getEmail());
+
+                if (positionBeingAppliedFor.getPositionCreator().isEmailable())
+                    SendEmail.sendEmail("New Application",
+                            applyingCandidate.getName() + " has applied for "
+                                    + positionBeingAppliedFor.getPositionName()
+                                    + ". Check it out on the My Postings page in the Admin Tools tab.",
+                            positionBeingAppliedFor.getPositionCreator().getEmail());
+
                 return "position_application_confirmation";
+            }
             else if(hasNewResume)
                 return "resume_upload_confirmation";
             else
@@ -158,6 +182,13 @@ public class CandidateController {
             if (applicationToBeDeleted.getResumeExtension() != null)
                 Files.delete(applicationToBeDeleted.getResume());
             dubiousService.deleteByDubiousId(idToBeDeleted);
+            Candidate candidate = applicationToBeDeleted.getCandidate();
+            if (candidate.isEmailable()) {
+                String message = "You've succesfully withdrawn your application for "
+                        + applicationToBeDeleted.getPosition() + ". But be sure to check" +
+                        " out the other openings waiting for you. \n\n Best Regards, GeekSI";
+                SendEmail.sendEmail("We're sad to see you go", message, candidate.getEmail());
+            }
             model.addAttribute("position", activePositionService.findActivePositionById(Long.parseLong(positionId)));
             return "delete_application_confirmation";
         }
