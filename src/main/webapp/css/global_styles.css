@@ -1,6 +1,8 @@
 button, input {margin: 3px;}
 ul.menubar {list-style-type: none;}
 .menubar li {border: 1px solid grey; font-family: sans-serif; padding: 7px; display: inline; margin: -2px;}
+#bell {position: relative; top: 5px;}
+#bell_circle {position: absolute; padding: 4px 10px; z-index: 1;}
 @keyframes hover-change {
 to {background-color: lightgrey;}
 }

@@ -31,7 +31,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/create_position", "/list_applicants", "/applied_positions_lookup", "/my_postinsg").hasRole("ADMIN")
-                            .antMatchers("/register/**", "/home", "/css/**", "/").permitAll()
+                            .antMatchers("/register/**", "/home", "/css/**", "/", "/images/**").permitAll()
                             .antMatchers("/**").authenticated()
                 )
 

@@ -19,10 +19,7 @@ import wow.cool.candidateregistrationproject.service.DubiousService;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +37,8 @@ public class CandidateController {
     private ActivePositionRepo activePositionRepo;
     @Autowired
     private ActivePositionService activePositionService;
+    @Autowired
+    private CandidateRepo candidateRepo;
 
     @GetMapping("register")
     public String register(Model model){
@@ -110,11 +109,11 @@ public class CandidateController {
     public String positionApplicationConfirmation(Model model, @ModelAttribute("application_info") FormInfoCarrier formInfoCarrier,
                                                   Principal principal) {
         try {
-
+            //create and set values of object values
             Candidate applyingCandidate = service.findByUsername(principal.getName());
             ActivePosition positionBeingAppliedFor = activePositionService.findActivePositionById(formInfoCarrier.getPositionId());
 
-            if (applyingCandidate.getPositionsAppliedFor().indexOf(positionBeingAppliedFor) == -1){
+            if (!applyingCandidate.getPositionsAppliedFor().contains(positionBeingAppliedFor)){
                 positionBeingAppliedFor.addCandidateToList(applyingCandidate);
                 activePositionService.saveActivePosition(positionBeingAppliedFor);
             }
@@ -128,6 +127,7 @@ public class CandidateController {
 
             boolean hasNewResume = formInfoCarrier.getFile() != null;
             if (hasNewResume) {
+                //check for matching file extensions: if matches, overwrite, if not, delete and write to new file
                 String originalFileName = formInfoCarrier.getFile().getOriginalFilename();
                 String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
                 if (joined.getResumeExtension() != null && !joined.getResumeExtension().equals(extension)) {
@@ -257,11 +257,18 @@ public class CandidateController {
     }
 
     @GetMapping("admin_tools")
-    public String adminTools(Principal principal){
+    public String adminTools(Principal principal) {
         if (service.findByUsername(principal.getName()).getRole().equalsIgnoreCase("ROLE_ADMIN"))
             return "admin_tools";
         else
             return "access_denied";
+    }
+
+    @GetMapping("notifications")
+    public String notifications(Model model, Principal principal) {
+        Candidate candidate = service.findByUsername(principal.getName());
+        model.addAttribute("notifications", candidate.getNotifications());
+        return "notifications";
     }
 
 }

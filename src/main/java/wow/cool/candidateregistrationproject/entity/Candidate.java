@@ -8,24 +8,24 @@ import java.util.List;
 @Table(name="candidate")
 public class Candidate {
 
-    @Column(name="user_id")
+    @Column(name = "user_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="username")
+    @Column(name = "username")
     private String username;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="role")
+    @Column(name = "role")
     private String role;
 
     @ManyToMany(
@@ -46,6 +46,12 @@ public class Candidate {
 
     @Column(name = "emailable")
     private Boolean emailable;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "candidate_notification_join", joinColumns = @JoinColumn(name = "candidate_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id"))
+    private List<Notification> notifications;
 
     public Candidate() {
         this.role = "ROLE_USER";
@@ -133,4 +139,15 @@ public class Candidate {
     public void setEmailable(Boolean emailable) {
         this.emailable = emailable;
     }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void addNotification(Notification notification) {
+        if (notifications == null)
+            notifications = new ArrayList<>();
+        notifications.add(notification);
+    }
+
 }

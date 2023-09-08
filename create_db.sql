@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate` (
   `email` VARCHAR(255) NULL DEFAULT NULL,
   `name` VARCHAR(63) NOT NULL,
   `role` VARCHAR(45) NULL DEFAULT NULL,
+  `emailable` TINYINT(4) NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)

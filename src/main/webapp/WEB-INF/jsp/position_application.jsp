@@ -29,6 +29,7 @@
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
 </ul>
+
 <table id="position_application_table">
     <tr>
         <th>Position Name</th>

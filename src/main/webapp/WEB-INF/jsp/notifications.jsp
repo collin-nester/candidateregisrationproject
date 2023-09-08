@@ -2,14 +2,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-
 <head>
-    <title>Login</title>
+    <title>Notifications</title>
     <link rel="stylesheet" href="../css/global_styles.css">
 </head>
 <body>
-
-<h2>Login</h2>
+<h2>Notifications</h2>
 <ul class="menubar">
     <a href="home"> <li>Home</li> </a>
     <a href="register"> <li>Register</li> </a>
@@ -18,18 +16,26 @@
     <a href="admin_tools"> <li>Admin Tools</li> </a>
     <a href="login"> <li>Login</li> </a>
     <a href="logout"> <li>Logout</li> </a>
-    <li>
-        <svg id="bell_circle" height="8" width="8" style="position: absolute; padding: 4px 10px; z-index: 1;">
-            <circle cx="4" cy="4" r="4" fill="red"/>
-        </svg>
-        <img src="../images/bell.png" height="20px" id="bell">
-    </li>
 </ul>
-<form method="post" action="login">
-    <br>Username: <input type="text" name="username"/>
-    <br>Password: <input type="password" name="password"/>
-    <br><input type="submit" name="login" value="login">
-</form>
+
+<c:choose>
+    <c:when test="${notification.size() == 0}">
+        You have no new notifications
+    </c:when>
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Message</th>
+        </tr>
+        <c:otherwise>
+            <c:forEach items="${notifications}" var="notification">
+                <tr>
+                    <th>${notification.header}</th>
+                    <td>${notification.body}</th>
+            </c:forEach>
+        </c:otherwise>
+    </table>
+</c:choose>
 
 </body>
 </html>

@@ -41,7 +41,7 @@
                 <td id="position_id_data">${position.id}</td>
                 <td style="width: 10%;">${position.candidateList.size()}</td>
                 <td id="position_select_button_data" onclick="getElementById('posid').value=${position.id}; getElementById('submit').click();"><button>View Applicants</button></td>
-                <td id="position_select_button_data" onclick="getElementById('delete_posid').value=${position.id}; getElementById('delete_submit').click();"><button>Delete Position</button></td>
+                <td id="position_select_button_data" onclick="if (!(confirm('Confirm deletion?'))) return false; getElementById('delete_posid').value=${position.id}; getElementById('delete_submit').click();"><button>Delete Position</button></td>
         </tr>
     </c:forEach>
 
