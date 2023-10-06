@@ -4,20 +4,31 @@ CREATE SCHEMA IF NOT EXISTS `candidate_registration`;
 DROP TABLE IF EXISTS `candidate_registration`.`candidate`;
 DROP TABLE IF EXISTS `candidate_registration`.`active_positions`;
 DROP TABLE IF EXISTS `candidate_registration`.`position_candidate_join`;
+DROP TABLE IF EXISTS `candidate_registration`.`notification`;
+DROP TABLE IF EXISTS `candidate_registration`.`candidate_notification_join`
+
+CREATE TABLE IF NOT EXISTS `candidate_registration`.`notification` (
+  `notification_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `notification_body` VARCHAR(200) NULL DEFAULT NULL,
+  `notification_head` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`notification_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
 
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate` (
   `user_id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(63) NULL DEFAULT NULL,
   `password` CHAR(60) NULL DEFAULT NULL,
   `email` VARCHAR(255) NULL DEFAULT NULL,
-  `name` VARCHAR(63) NOT NULL,
-  `role` VARCHAR(45) NULL DEFAULT NULL,
-  `emailable` TINYINT(4) NULL DEFAULT NULL,
+  `name` VARCHAR(63) NULL DEFAULT NULL,
+  `role` VARCHAR(45) NULL DEFAULT 'ROLE_USER',
+  `emailable` TINYINT(4) NULL DEFAULT '0',
+  `new_notifications` INT(6) NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = latin1
 
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`active_positions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -33,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`active_positions` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = latin1
 
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
   `position_id` INT(11) NOT NULL,
@@ -55,4 +66,22 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`position_candidate_join` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = latin1
+
+CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate_notification_join` (
+  `cand_id` INT(11) NOT NULL,
+  `notification_id` INT(11) NOT NULL,
+  PRIMARY KEY (`cand_id`, `notification_id`),
+  INDEX `notification_id_idx` (`notification_id` ASC) VISIBLE,
+  CONSTRAINT `cand_id`
+    FOREIGN KEY (`cand_id`)
+    REFERENCES `candidate_registration`.`candidate` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `notification_id`
+    FOREIGN KEY (`notification_id`)
+    REFERENCES `candidate_registration`.`notification` (`notification_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1

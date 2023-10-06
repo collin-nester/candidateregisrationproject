@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -10,25 +8,32 @@
 <body>
 
 <h2>Login</h2>
-<ul class="menubar">
-    <a href="home"> <li>Home</li> </a>
-    <a href="register"> <li>Register</li> </a>
-    <a href="position_application"> <li>Position Application</li> </a>
-    <a href="applied_positions"> <li>Applied Positions</li> </a>
-    <a href="admin_tools"> <li>Admin Tools</li> </a>
-    <a href="login"> <li>Login</li> </a>
-    <a href="logout"> <li>Logout</li> </a>
-    <li>
-        <svg id="bell_circle" height="8" width="8" style="position: absolute; padding: 4px 10px; z-index: 1;">
+<div class="menubar">
+    <a href="home">Home</a>
+    <a href="register">Register</a>
+    <a href="position_application">Position Application</a>
+    <a href="applied_positions">Applied Positions</a>
+    <a href="admin_tools">Admin Tools</a>
+    <a href="login">Login</a>
+    <a href="logout">Logout</a>
+    <span class="full_dropdown">
+    <a href="notifications">
+        <svg id="bell_circle" height="8" width="8">
             <circle cx="4" cy="4" r="4" fill="red"/>
         </svg>
         <img src="../images/bell.png" height="20px" id="bell">
-    </li>
-</ul>
+    </a>
+    <span class="navbar_dropdown">
+        <a href="google.com">Hi there what if its a really long message</a>
+        <a href="google.com">This dropdown</a>
+        <a href="google.com">Is working I hope</a>
+    </span>
+    </span>
+</div>
 <form method="post" action="login">
     <br>Username: <input type="text" name="username"/>
     <br>Password: <input type="password" name="password"/>
-    <br><input type="submit" name="login" value="login">
+    <br><input type="submit" name="login" value="Login">
 </form>
 
 </body>

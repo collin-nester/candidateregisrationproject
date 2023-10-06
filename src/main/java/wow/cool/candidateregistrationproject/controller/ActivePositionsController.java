@@ -11,7 +11,7 @@ import wow.cool.candidateregistrationproject.controller.Helpers.SendEmail;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
 import wow.cool.candidateregistrationproject.entity.Dubious;
-import wow.cool.candidateregistrationproject.entity.DubiousId;
+import wow.cool.candidateregistrationproject.entity.Helpers.DubiousId;
 import wow.cool.candidateregistrationproject.service.ActivePositionService;
 import wow.cool.candidateregistrationproject.service.CandidateService;
 import wow.cool.candidateregistrationproject.service.DubiousService;
@@ -41,6 +41,7 @@ public class ActivePositionsController {
     public String createPosition(Model model) {
 
         model.addAttribute("new_position", new ActivePosition());
+        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
 
         return "create_position";
     }
@@ -65,8 +66,11 @@ public class ActivePositionsController {
                             "An application for " + newPosition.getPositionName() + " has just opened up at GeekSI.",
                             candidate.getEmail());
 
+            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+
             return "create_position_confirmation";
         } else {
+            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
             return "page_error";
         }
 
@@ -80,6 +84,7 @@ public class ActivePositionsController {
         model.addAttribute("activePositions", allActivePositions);
         model.addAttribute("posinfo", new FormInfoCarrier());
         model.addAttribute("max_pos_id", service.findHighestID());
+        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
 
        return "list_applicants";
     }
@@ -101,6 +106,7 @@ public class ActivePositionsController {
         model.addAttribute("applications", applicationList);
         model.addAttribute("position", service.findActivePositionById(position_id));
         model.addAttribute("total_applied", applicants.size());
+        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
 
         return "applicant_list";
         }
@@ -112,9 +118,9 @@ public class ActivePositionsController {
 
     @GetMapping(value = "resumes/{file_name}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public FileSystemResource getFile(@PathVariable("file_name") String fileName, Principal principal) {
+    public FileSystemResource getFile(@PathVariable("file_name") String fileName) {
 
-        Candidate candidate = candidateService.findByUsername(principal.getName());
+        Candidate candidate = HomeController.currentUser;
         long candidateId = candidate.getId();
         long claimedCandidateId = Long.parseLong(fileName.substring(0, fileName.indexOf("+")));
         long positionId = Long.parseLong(fileName.substring(fileName.indexOf("+") + 1));
@@ -129,9 +135,9 @@ public class ActivePositionsController {
     }
 
     @GetMapping("my_postings")
-    public String myPostings(Model model, Principal principal) {
+    public String myPostings(Model model) {
 
-        List<ActivePosition> positions = candidateService.findByUsername(principal.getName()).getPositionsCreated();
+        List<ActivePosition> positions = HomeController.currentUser.getPositionsCreated();
 
         long max = 0;
         for (ActivePosition i : service.getAllActivePositions())

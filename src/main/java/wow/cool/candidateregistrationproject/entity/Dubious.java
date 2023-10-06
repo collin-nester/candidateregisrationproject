@@ -1,5 +1,7 @@
 package wow.cool.candidateregistrationproject.entity;
 
+import wow.cool.candidateregistrationproject.entity.Helpers.DubiousId;
+
 import javax.persistence.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;

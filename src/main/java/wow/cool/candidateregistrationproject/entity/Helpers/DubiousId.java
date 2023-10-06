@@ -1,4 +1,4 @@
-package wow.cool.candidateregistrationproject.entity;
+package wow.cool.candidateregistrationproject.entity.Helpers;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

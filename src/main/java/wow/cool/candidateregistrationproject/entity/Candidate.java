@@ -49,9 +49,12 @@ public class Candidate {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "candidate_notification_join", joinColumns = @JoinColumn(name = "candidate_id"),
+    @JoinTable(name = "candidate_notification_join", joinColumns = @JoinColumn(name = "cand_id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id"))
     private List<Notification> notifications;
+
+    @Column(name = "new_notifications")
+    private long newNotifications;
 
     public Candidate() {
         this.role = "ROLE_USER";
@@ -150,4 +153,11 @@ public class Candidate {
         notifications.add(notification);
     }
 
+    public long getNewNotifications() {
+        return newNotifications;
+    }
+
+    public void setNewNotifications(long newNotifications) {
+        this.newNotifications = newNotifications;
+    }
 }

@@ -5,23 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "notification")
 public class Notification {
 
     @Id
-    @Column(name="notification_id")
+    @Column(name = "notification_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="notification_head")
+    @Column(name = "notification_head")
     private String head;
 
-    @Column(name="notification_body")
+    @Column(name = "notification_body")
     private String body;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "candidate_notification_join", joinColumns = @JoinColumn(name = "notification_id"),
-            inverseJoinColumns = @JoinColumn(name = "candidate_id"))
+            inverseJoinColumns = @JoinColumn(name = "cand_id"))
     private List<Candidate> candidates;
 
     public Notification(){}
