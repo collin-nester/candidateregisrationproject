@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import wow.cool.candidateregistrationproject.entity.Notification;
 import wow.cool.candidateregistrationproject.repo.NotificationRepo;
 
+import java.util.Optional;
+
 @Service
 public class NotificationService {
 
@@ -15,8 +17,8 @@ public class NotificationService {
         repo.save(notification);
     }
 
-    public Notification getNotificationById(long id) {
-        return repo.findById(id).get();
+    public Optional<Notification> getNotificationById(long id) {
+        return repo.findById(id);
     }
 
     public void deleteById(long id) {

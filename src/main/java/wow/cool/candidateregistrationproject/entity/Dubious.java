@@ -33,6 +33,11 @@ public class Dubious {
     private String resumeExtension;
 
     public Dubious() {}
+    public Dubious(Candidate applyingCandidate, ActivePosition positionBeingAppliedFor) {
+        candidate = applyingCandidate;
+        position = positionBeingAppliedFor;
+        id = new DubiousId(position.getId(), candidate.getId());
+    }
 
     public DubiousId getId() {
         return id;

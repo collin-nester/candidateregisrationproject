@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wow.cool.candidateregistrationproject.controller.Helpers.FormInfoCarrier;
 import wow.cool.candidateregistrationproject.controller.Helpers.SendEmail;
+import wow.cool.candidateregistrationproject.controller.Helpers.SendNotification;
 import wow.cool.candidateregistrationproject.entity.ActivePosition;
 import wow.cool.candidateregistrationproject.entity.Candidate;
 import wow.cool.candidateregistrationproject.entity.Dubious;
@@ -16,13 +17,13 @@ import wow.cool.candidateregistrationproject.repo.CandidateRepo;
 import wow.cool.candidateregistrationproject.service.ActivePositionService;
 import wow.cool.candidateregistrationproject.service.CandidateService;
 import wow.cool.candidateregistrationproject.service.DubiousService;
+import wow.cool.candidateregistrationproject.service.NotificationService;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Controller
 public class CandidateController {
@@ -39,12 +40,17 @@ public class CandidateController {
     private ActivePositionService activePositionService;
     @Autowired
     private CandidateRepo candidateRepo;
+    @Autowired
+    private NotificationService notificationService;
+
+    public CandidateController() {
+    }
 
     @GetMapping("register")
     public String register(Model model){
         model.addAttribute("candidate", new Candidate());
         model.addAttribute("forminfocarrier", new FormInfoCarrier());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
         return "candidate_registration";
     }
 
@@ -63,14 +69,18 @@ public class CandidateController {
                         ". Feel free to submit your applications under the Position Application tab.";
                 SendEmail.sendEmail("Welcome to GeekSI", message, newCandidate.getEmail());
             }
+
+            SendNotification sendNotification = new SendNotification();
+            sendNotification.sendNotification(1, newCandidate, notificationService, service);
+
             model.addAttribute("candidate", newCandidate);
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
             return "registration_confirmation";
         }
         catch(Exception e){
             System.out.println(e.fillInStackTrace());
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "registration_error";
         }
     }
@@ -96,7 +106,7 @@ public class CandidateController {
         model.addAttribute("applicant", applicant);
         model.addAttribute("applications", applicationList);
         model.addAttribute("total_applied", applicant.getPositionsAppliedFor().size());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "applied_positions";
     }
@@ -107,7 +117,7 @@ public class CandidateController {
         List<ActivePosition> allActivePositions = activePositionService.getAllActivePositions();
         model.addAttribute("allActivePositions", allActivePositions);
         model.addAttribute("application_info", new FormInfoCarrier());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "position_application";
     }
@@ -116,13 +126,13 @@ public class CandidateController {
     public String positionApplicationConfirmation(Model model, @ModelAttribute("application_info") FormInfoCarrier formInfoCarrier) {
         try {
             //create and set values of object values
-            Candidate applyingCandidate = HomeController.currentUser;
+            Candidate applyingCandidate = HomeController.getCurrentUser();
             ActivePosition positionBeingAppliedFor = activePositionService.findActivePositionById(formInfoCarrier.getPositionId());
 
             if (!applyingCandidate.getPositionsAppliedFor().contains(positionBeingAppliedFor)){
-                positionBeingAppliedFor.addCandidateToList(applyingCandidate);
-                activePositionService.saveActivePosition(positionBeingAppliedFor);
+                dubiousService.saveDubious(new Dubious(applyingCandidate, positionBeingAppliedFor));
             }
+
             DubiousId jointId = new DubiousId(formInfoCarrier.getPositionId(), applyingCandidate.getId());
             Dubious joined = dubiousService.findByDubiousId(jointId);
 
@@ -150,38 +160,40 @@ public class CandidateController {
 
             model.addAttribute("application_info", joined);
             if (formInfoCarrier.getExperience() != null || formInfoCarrier.getEducation() != null) {
-
-                String message = "Your application for "
+                String candidateMessage = "Your application for "
                         + positionBeingAppliedFor.getPositionName()
                         + " has been recieved! We look forward to getting to know you " +
                         "better through this application process.\n\n" +
                         "Best Regards, GeekSI";
                 if (applyingCandidate.isEmailable())
-                    SendEmail.sendEmail("Thanks for applying!", message, applyingCandidate.getEmail());
+                    SendEmail.sendEmail("Thanks for applying!", candidateMessage, applyingCandidate.getEmail());
 
+                String creatorMessage = applyingCandidate.getName() + " has applied for "
+                        + positionBeingAppliedFor.getPositionName()
+                        + ". Check it out on the My Postings page in the Admin Tools tab.";
                 if (positionBeingAppliedFor.getPositionCreator().isEmailable())
-                    SendEmail.sendEmail("New Application",
-                            applyingCandidate.getName() + " has applied for "
-                                    + positionBeingAppliedFor.getPositionName()
-                                    + ". Check it out on the My Postings page in the Admin Tools tab.",
-                            positionBeingAppliedFor.getPositionCreator().getEmail());
+                    SendEmail.sendEmail("New Application", creatorMessage, positionBeingAppliedFor.getPositionCreator().getEmail());
 
-                model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+                SendNotification sendNotification = new SendNotification();
+                sendNotification.sendNotification("Thanks for applying!", candidateMessage, applyingCandidate, notificationService, service);
+                sendNotification.sendNotification("New Applicaation", creatorMessage, positionBeingAppliedFor.getPositionCreator(), notificationService, service);
+
+                model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
                 return "position_application_confirmation";
             }
             else if(hasNewResume) {
-                model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+                model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
                 return "resume_upload_confirmation";
             }
             else {
-                model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+                model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
                 return "page_error";
                 }
         }
         catch (Exception e) {
             System.out.println(e.fillInStackTrace());
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "page_error";
         }
     }
@@ -190,7 +202,7 @@ public class CandidateController {
     public String deleteApplication(Model model, @RequestParam String positionId) {
 
         try {
-            DubiousId idToBeDeleted = new DubiousId(Long.parseLong(positionId), HomeController.currentUser.getId());
+            DubiousId idToBeDeleted = new DubiousId(Long.parseLong(positionId), HomeController.getCurrentUser().getId());
             Dubious applicationToBeDeleted = dubiousService.findByDubiousId(idToBeDeleted);
             if (applicationToBeDeleted.getResumeExtension() != null)
                 Files.delete(applicationToBeDeleted.getResume());
@@ -203,12 +215,12 @@ public class CandidateController {
                 SendEmail.sendEmail("We're sad to see you go", message, candidate.getEmail());
             }
             model.addAttribute("position", activePositionService.findActivePositionById(Long.parseLong(positionId)));
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "delete_application_confirmation";
         }
         catch (Exception e) {
             System.out.println(e.fillInStackTrace());
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "page_error";
         }
     }
@@ -218,7 +230,7 @@ public class CandidateController {
 
         model.addAttribute("position_id", positionId);
         model.addAttribute("form_info_carrier", new FormInfoCarrier());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "upload_resume";
     }
@@ -228,10 +240,10 @@ public class CandidateController {
                                       @ModelAttribute("form_info_carrier") FormInfoCarrier formInfoCarrier,
                                       @RequestParam("positionId") String positionId) {
 
-        formInfoCarrier.setCandidate(HomeController.currentUser);
+        formInfoCarrier.setCandidate(HomeController.getCurrentUser());
         formInfoCarrier.setPosition(activePositionService.findActivePositionById(Long.parseLong(positionId)));
 
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return positionApplicationConfirmation(model, formInfoCarrier);
     }
@@ -240,7 +252,7 @@ public class CandidateController {
     public String appliedPositionsLookup(Model model) {
 
         model.addAttribute("application_info", new DubiousId());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "applied_positions_lookup";
     }
@@ -266,21 +278,21 @@ public class CandidateController {
             model.addAttribute("applicant", applicant);
             model.addAttribute("applications", applicationList);
             model.addAttribute("total_applied", positionsAppliedFor.size());
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
             return "applied_positions_list";
         }
         catch (Exception e) {
             System.out.println(e.fillInStackTrace());
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "page_error";
         }
     }
 
     @GetMapping("admin_tools")
     public String adminTools(Model model) {
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
-        if (HomeController.currentUser.getRole().equalsIgnoreCase("ROLE_ADMIN"))
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
+        if (HomeController.getCurrentUser().getRole().equalsIgnoreCase("ROLE_ADMIN"))
             return "admin_tools";
         else
             return "access_denied";
@@ -288,7 +300,7 @@ public class CandidateController {
 
     @GetMapping("notifications")
     public String notifications(Model model) {
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
         return "notifications";
     }
 

@@ -27,8 +27,7 @@ public class Notification {
 
     public Notification(){}
 
-    public Notification(long id, String head, String body) {
-        this.id = id;
+    public Notification(String head, String body) {
         this.head = head;
         this.body = body;
     }

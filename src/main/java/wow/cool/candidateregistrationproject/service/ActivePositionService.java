@@ -14,6 +14,7 @@ public class ActivePositionService {
     @Autowired
     ActivePositionRepo repo;
 
+    @Transactional
     public List<ActivePosition> getAllActivePositions() {
 
         List<ActivePosition> activePositionList = repo.findAll();
@@ -21,9 +22,9 @@ public class ActivePositionService {
         return activePositionList;
     }
 
-    public ActivePositionService() {
-    }
+    public ActivePositionService() {}
 
+    @Transactional
     public ActivePosition findActivePositionById(long id) {
 
         ActivePosition activePosition = repo.findById(id).orElse(null);
@@ -31,6 +32,7 @@ public class ActivePositionService {
         return activePosition;
     }
 
+    @Transactional
     public ActivePosition saveActivePosition(ActivePosition newActivePosition) {
 
         return repo.save(newActivePosition);

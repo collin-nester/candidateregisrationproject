@@ -58,6 +58,7 @@ public class Candidate {
 
     public Candidate() {
         this.role = "ROLE_USER";
+        notifications = new ArrayList<>();
     }
 
     public Candidate(String name, String username, String password, String email) {
@@ -66,6 +67,7 @@ public class Candidate {
         this.password = password;
         this.email = email;
         this.role = "ROLE_USER";
+        notifications = new ArrayList<>();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class ActivePositionsController {
     public String createPosition(Model model) {
 
         model.addAttribute("new_position", new ActivePosition());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "create_position";
     }
@@ -66,11 +66,11 @@ public class ActivePositionsController {
                             "An application for " + newPosition.getPositionName() + " has just opened up at GeekSI.",
                             candidate.getEmail());
 
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
             return "create_position_confirmation";
         } else {
-            model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+            model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
             return "page_error";
         }
 
@@ -84,7 +84,7 @@ public class ActivePositionsController {
         model.addAttribute("activePositions", allActivePositions);
         model.addAttribute("posinfo", new FormInfoCarrier());
         model.addAttribute("max_pos_id", service.findHighestID());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
        return "list_applicants";
     }
@@ -106,7 +106,7 @@ public class ActivePositionsController {
         model.addAttribute("applications", applicationList);
         model.addAttribute("position", service.findActivePositionById(position_id));
         model.addAttribute("total_applied", applicants.size());
-        model.addAttribute("notifications", HomeController.currentUser.getNotifications());
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "applicant_list";
         }
@@ -120,7 +120,7 @@ public class ActivePositionsController {
     @ResponseBody
     public FileSystemResource getFile(@PathVariable("file_name") String fileName) {
 
-        Candidate candidate = HomeController.currentUser;
+        Candidate candidate = HomeController.getCurrentUser();
         long candidateId = candidate.getId();
         long claimedCandidateId = Long.parseLong(fileName.substring(0, fileName.indexOf("+")));
         long positionId = Long.parseLong(fileName.substring(fileName.indexOf("+") + 1));
@@ -137,7 +137,7 @@ public class ActivePositionsController {
     @GetMapping("my_postings")
     public String myPostings(Model model) {
 
-        List<ActivePosition> positions = HomeController.currentUser.getPositionsCreated();
+        List<ActivePosition> positions = HomeController.getCurrentUser().getPositionsCreated();
 
         long max = 0;
         for (ActivePosition i : service.getAllActivePositions())
