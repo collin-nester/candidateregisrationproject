@@ -4,7 +4,13 @@
     <a href="register">Register</a>
     <a href="position_application">Position Application</a>
     <a href="applied_positions">Applied Positions</a>
-    <a href="admin_tools">Admin Tools</a>
+    <a href="#">Admin Tools</a>
+    <span class="full_dropdown navbar_dropdown" id="admin_tools_dropdown">
+        <a href="create_position">Create Position</a>
+        <a href="list_applicants">List Applicants</a>
+        <a href="applied_positions_lookup">Applied Positions Lookup</a>
+        <a href="my_postings">My Postings</a>
+    </span>
     <a href="login">Login</a>
     <a href="logout">Logout</a>
     <span class="full_dropdown">

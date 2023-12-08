@@ -32,18 +32,18 @@ ID: ${applicant.id}
     </tr>
     <c:forEach items="${applications}" var="application">
         <tr>
-                <td>${application.position.positionName}</td>
-                <td>${application.position.positionDescription}</td>
-                <td class="smallTableColumn">${application.position.id}</td>
-                <td>${application.education}</td>
-                <td>${application.experience}</td>
-                <td class="smallTableColumn">
-                    <c:if test="${application.resume != null}">
-                        <a href="resumes/${application.candidate.id}+${application.position.id}" target="_blank">
-                            <button>Download</button>
-                        </a>
-                    </c:if>
-                </td>
+            <td>${application.position.positionName}</td>
+            <td>${application.position.positionDescription}</td>
+            <td class="smallTableColumn">${application.position.id}</td>
+            <td>${application.education}</td>
+            <td>${application.experience}</td>
+            <td class="smallTableColumn">
+                <c:if test="${application.resume != null}">
+                    <a href="resumes/${application.candidate.id}+${application.position.id}" target="_blank">
+                        <button>Download</button>
+                    </a>
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
     <button onclick="window.history.back()">Go Back</button>
