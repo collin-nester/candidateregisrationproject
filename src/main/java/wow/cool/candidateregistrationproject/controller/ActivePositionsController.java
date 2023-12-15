@@ -147,6 +147,7 @@ public class ActivePositionsController {
         model.addAttribute("created_positions", positions);
         model.addAttribute("posinfo", new FormInfoCarrier());
         model.addAttribute("max_pos_id", max);
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
 
         return "my_postings";
     }
@@ -172,6 +173,7 @@ public class ActivePositionsController {
 
         model.addAttribute("deleted_applications", deletedApplications);
         model.addAttribute("position", positionToBeDeleted);
+        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
         return "delete_position";
     }
 

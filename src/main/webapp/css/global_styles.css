@@ -22,5 +22,7 @@ span.full_dropdown {display: inline-block; position: relative; width: 210px;}
 #admin_tools_dropdown {position: absolute; top: 97px; left: 432px; display: none;}
 a:hover + .navbar_dropdown, a:hover + #admin_tools_dropdown, .navbar_dropdown:hover, #admin_tools_dropdown:hover {display: block;}
 .navbar_dropdown::-webkit-scrollbar {width: 0.2em;}
-.navbar_dropdown::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px lightgrey;}
-.navbar_dropdown::-webkit-scrollbar-thumb {background-color: grey; outline: 1px solid grey;}
+.navbar_dropdown::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px #B19DFF;}
+.navbar_dropdown::-webkit-scrollbar-thumb {background-color: grey; outline: 1px solid #9074FF;}
+textarea, input, button {background: inherit;}
+input:hover, input:focus, button:hover {background: #9074FF; cursor: pointer;}
