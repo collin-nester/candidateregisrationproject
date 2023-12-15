@@ -289,15 +289,6 @@ public class CandidateController {
         }
     }
 
-    @GetMapping("admin_tools")
-    public String adminTools(Model model) {
-        model.addAttribute("notifications", HomeController.getCurrentUserNotifications());
-        if (HomeController.getCurrentUser().getRole().equalsIgnoreCase("ROLE_ADMIN"))
-            return "admin_tools";
-        else
-            return "access_denied";
-    }
-
     @GetMapping("notifications")
     public String notifications(Model model) {
         model.addAttribute("notifications", HomeController.getCurrentUserNotifications());

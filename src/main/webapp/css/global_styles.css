@@ -1,20 +1,23 @@
+body {background: #f9f7ff; font-family: Georgia;}
+h1, h2, h3 {font-family: Verdana;}
 button, input {margin: 3px;}
-.menubar a {border: 1px solid grey; font-family: sans-serif; padding: 7px; margin: -2px;}
+.menubar a {border: 1px solid grey; padding: 7px; margin: -2px; text-decoration: none; color: black; background: #DCD4FF;}
 .menubar {margin-bottom: 20px;}
 #bell {position: relative; top: 5px;}
 #bell_circle {position: absolute; padding: 4px 10px; z-index: 1;}
 @keyframes hover-change {
-to {background-color: lightgrey;}
+to {background-color: #B19DFF;}
 }
 .menubar a:hover{animation: hover-change 0.5s ease-out; animation-fill-mode: forwards;}
-.menubar a {text-decoration: none; color: black;}
+tr:nth-child(odd) {background: #B19DFF;}
+tr:nth-child(even) {background: #DCD4FF;}
 .smallTableColumn {width: 5%;}
 .mediumTableColumn {width: 10%;}
 .largeTableColumn {width: 20%;}
 div.pos_selection {position: absolute; top: 20px; margin: 5px 0px 0px 50%; border: 1px solid grey; padding: 10px;}
 table, td, th {border: 1px solid black; border-collapse: collapse; padding: 5px;}
 span.full_dropdown {display: inline-block; position: relative; width: 210px;}
-.navbar_dropdown a {display: block; background-color: white; width: 200px; padding: 7px; max-height: 45px; overflow: clip; line-height: 1.5; font-weight: bold; }
+.navbar_dropdown a {display: block; background-color: white; width: 200px; padding: 7px; max-height: 45px; overflow: clip; line-height: 1.5; font-weight: bold;  background: #DCD4FF;}
 .navbar_dropdown {top: 30px; left: -2px; overflow: scroll; position: absolute; z-index: 1; display: none; border: 1px solid grey; max-height: 100px; overflow-x: hidden;}
 #admin_tools_dropdown {position: absolute; top: 97px; left: 432px; display: none;}
 a:hover + .navbar_dropdown, a:hover + #admin_tools_dropdown, .navbar_dropdown:hover, #admin_tools_dropdown:hover {display: block;}

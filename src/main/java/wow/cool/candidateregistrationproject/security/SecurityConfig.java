@@ -27,8 +27,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/create_position", "/list_applicants", "/applied_positions_lookup", "/my_postinsg").hasRole("ADMIN")
+                        .antMatchers("/create_position", "/list_applicants", "/applied_positions_lookup", "/my_postings").hasRole("ADMIN")
                             .antMatchers("/register/**", "/home", "/css/**", "/", "/images/**", "/WEB-INF/tags/**").permitAll()
                             .antMatchers("/**").authenticated()
                 )
@@ -41,7 +42,8 @@ public class SecurityConfig {
 
                 .logout(logout -> logout.
                         logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .permitAll());
+                        .permitAll())
+                .exceptionHandling().accessDeniedPage("/WEB-INF/jsp/access_denied.jsp");
 
         return http.build();
     }

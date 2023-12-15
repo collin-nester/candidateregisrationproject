@@ -28,6 +28,7 @@
         <th>Position Name</th>
         <th>Position Description</th>
         <th>Position ID</th>
+        <th></th>
     </tr>
     <c:forEach items="${allActivePositions}" var="activePos">
         <tr>

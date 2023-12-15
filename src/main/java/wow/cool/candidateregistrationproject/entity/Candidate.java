@@ -53,9 +53,6 @@ public class Candidate {
             inverseJoinColumns = @JoinColumn(name = "notification_id"))
     private List<Notification> notifications;
 
-    @Column(name = "new_notifications")
-    private long newNotifications;
-
     public Candidate() {
         this.role = "ROLE_USER";
         notifications = new ArrayList<>();
@@ -153,13 +150,5 @@ public class Candidate {
         if (notifications == null)
             notifications = new ArrayList<>();
         notifications.add(notification);
-    }
-
-    public long getNewNotifications() {
-        return newNotifications;
-    }
-
-    public void setNewNotifications(long newNotifications) {
-        this.newNotifications = newNotifications;
     }
 }

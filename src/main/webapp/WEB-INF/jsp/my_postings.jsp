@@ -26,6 +26,8 @@
         <th>Position Description</th>
         <th>Position ID</th>
         <th style="width: 10%;">Total Applicants</th>
+        <th></th>
+        <th></th>
     </tr>
 
     <c:forEach items="${created_positions}" var="position">

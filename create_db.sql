@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate` (
   `name` VARCHAR(63) NULL DEFAULT NULL,
   `role` VARCHAR(45) NULL DEFAULT 'ROLE_USER',
   `emailable` TINYINT(4) NULL DEFAULT '0',
-  `new_notifications` INT(6) NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
@@ -71,8 +70,10 @@ DEFAULT CHARACTER SET = latin1
 CREATE TABLE IF NOT EXISTS `candidate_registration`.`candidate_notification_join` (
   `cand_id` INT(11) NOT NULL,
   `notification_id` INT(11) NOT NULL,
-  PRIMARY KEY (`cand_id`, `notification_id`),
+  `creation_order` INT(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`creation_order`),
   INDEX `notification_id_idx` (`notification_id` ASC) VISIBLE,
+  INDEX `cand_id_idx` (`cand_id` ASC) VISIBLE,
   CONSTRAINT `cand_id`
     FOREIGN KEY (`cand_id`)
     REFERENCES `candidate_registration`.`candidate` (`user_id`)
